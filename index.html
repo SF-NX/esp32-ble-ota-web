@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7f6">
+  <meta name="description" content="ESP32 BLE OTA firmware updater for mobile and desktop browsers">
+  <title>ESP32 BLE OTA</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/app-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="i-bluetooth" viewBox="0 0 24 24"><path d="m7 7 10 10-5 4V3l5 4L7 17"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M12 18v-6m-3 3h6"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5 5 5"/><path d="M20 15v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6m8 14h8"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 2.9 1.8 17a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 2.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></symbol>
+  </svg>
+
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark"><svg><use href="#i-bluetooth"/></svg></div>
+      <div>
+        <h1>ESP32 BLE OTA</h1>
+        <p data-i18n="subtitle">移动固件更新工具</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-button" id="themeButton" type="button" aria-label="切换主题"><svg><use href="#i-moon"/></svg></button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="status-strip" id="statusStrip" aria-live="polite">
+      <span class="status-dot"></span>
+      <div class="status-copy">
+        <strong id="statusText" data-i18n="idle">等待连接设备</strong>
+        <span id="statusDetail" data-i18n="ready">准备就绪</span>
+      </div>
+      <span class="platform-badge" id="platformBadge">WEB BLE</span>
+    </section>
+
+    <aside class="notice hidden" id="platformNotice">
+      <svg><use href="#i-alert"/></svg>
+      <div>
+        <strong id="noticeTitle"></strong>
+        <p id="noticeBody"></p>
+        <a class="notice-link hidden" id="bluefyLink" href="https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055" target="_blank" rel="noreferrer">在 App Store 获取 Bluefy</a>
+      </div>
+    </aside>
+
+    <div class="workflow">
+      <section class="step-card" id="deviceStep">
+        <div class="step-heading">
+          <span class="step-number">1</span>
+          <div><h2 data-i18n="deviceTitle">连接设备</h2><p data-i18n="deviceHint">选择附近的 BLE OTA 设备</p></div>
+          <span class="step-check"><svg><use href="#i-check"/></svg></span>
+        </div>
+
+        <button class="primary-button" id="connectButton" type="button">
+          <svg><use href="#i-link"/></svg><span data-i18n="connect">搜索并连接</span>
+        </button>
+
+        <div class="device-panel hidden" id="devicePanel">
+          <div class="device-identity">
+            <div class="device-icon"><svg><use href="#i-bluetooth"/></svg></div>
+            <div><strong id="deviceName">Unknown</strong><span id="deviceMeta">Connected</span></div>
+            <button class="text-button danger" id="disconnectButton" type="button" data-i18n="disconnect">断开</button>
+          </div>
+          <dl class="device-grid">
+            <div><dt>MODEL</dt><dd id="deviceModel">—</dd></div>
+            <div><dt>FIRMWARE</dt><dd id="deviceFirmware">—</dd></div>
+            <div><dt>HARDWARE</dt><dd id="deviceHardware">—</dd></div>
+            <div><dt>MAKER</dt><dd id="deviceMaker">—</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="step-card" id="fileStep">
+        <div class="step-heading">
+          <span class="step-number">2</span>
+          <div><h2 data-i18n="firmwareTitle">选择升级包</h2><p data-i18n="firmwareHint">请选择后缀为 .ota 的文件</p></div>
+          <span class="step-check"><svg><use href="#i-check"/></svg></span>
+        </div>
+
+        <div class="secure-mode">
+          <span class="secure-mode-icon"><svg><use href="#i-check"/></svg></span>
+          <div><strong data-i18n="secureMode">OTA 升级</strong><small data-i18n="secureModeHint">设备端验证升级包完整性</small></div>
+          <span class="secure-chip">CMD 0x0005</span>
+        </div>
+
+        <label class="file-picker" id="filePicker">
+          <input id="fileInput" type="file" accept=".ota,application/octet-stream">
+          <span class="file-picker-icon"><svg><use href="#i-file"/></svg></span>
+          <span class="file-picker-copy"><strong data-i18n="chooseFile">选择 .ota 升级包</strong><small data-i18n="chooseFileHint">请上传已下载的仪表OTA文件</small></span>
+          <span class="file-picker-action" data-i18n="browse">浏览</span>
+        </label>
+
+        <div class="file-summary hidden" id="fileSummary">
+          <svg><use href="#i-file"/></svg>
+          <div><strong id="fileName"></strong><span id="fileSize"></span><span id="filePackageMeta"></span></div>
+          <button class="icon-button compact" id="removeFileButton" type="button" aria-label="移除文件"><svg><use href="#i-x"/></svg></button>
+        </div>
+      </section>
+
+      <section class="step-card progress-card" id="uploadStep">
+        <div class="step-heading">
+          <span class="step-number">3</span>
+          <div><h2 data-i18n="updateTitle">固件更新</h2><p data-i18n="updateHint">传输时请保持页面在前台</p></div>
+          <span class="step-check"><svg><use href="#i-check"/></svg></span>
+        </div>
+
+        <div class="progress-layout">
+          <div class="progress-ring" id="progressRing" style="--progress:0">
+            <div><strong id="progressPercent">0%</strong><span data-i18n="progress">进度</span></div>
+          </div>
+          <div class="progress-info">
+            <div class="progress-track"><span id="progressFill"></span></div>
+            <p id="progressMessage" data-i18n="waiting">等待开始</p>
+            <div class="stats-grid">
+              <div><span data-i18n="sent">已发送</span><strong id="sentStat">0 B</strong></div>
+              <div><span>SECTOR</span><strong id="sectorStat">0</strong></div>
+              <div><span data-i18n="speed">速度</span><strong id="speedStat">—</strong></div>
+              <div><span>ETA</span><strong id="etaStat">—</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="bottom-space"></div>
+  <footer class="action-bar">
+    <div class="action-inner">
+      <div class="action-summary"><span data-i18n="nextStep">下一步</span><strong id="actionHint" data-i18n="connectFirst">先连接 BLE 设备</strong></div>
+      <button class="action-button" id="startButton" type="button" disabled><svg><use href="#i-upload"/></svg><span data-i18n="start">开始更新</span></button>
+      <button class="action-button abort hidden" id="abortButton" type="button"><svg><use href="#i-x"/></svg><span data-i18n="abort">中止更新</span></button>
+    </div>
+  </footer>
+
+  <section class="log-drawer" id="logDrawer">
+    <button class="log-handle" id="logToggle" type="button" aria-expanded="false">
+      <span><svg><use href="#i-terminal"/></svg><strong data-i18n="log">运行日志</strong><em id="logCount">0</em></span>
+      <svg class="chevron"><use href="#i-chevron"/></svg>
+    </button>
+    <div class="log-content">
+      <div class="log-toolbar"><span data-i18n="logHint">诊断与传输信息</span><button id="clearLogButton" type="button" data-i18n="clear">清空</button></div>
+      <div class="log-output" id="logOutput" role="log" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <div class="toast-region" id="toastRegion" aria-live="assertive"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

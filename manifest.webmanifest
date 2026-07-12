@@ -1,0 +1,13 @@
+{
+  "name": "ESP32 BLE OTA",
+  "short_name": "BLE OTA",
+  "description": "Mobile ESP32 BLE firmware updater",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f6",
+  "theme_color": "#126c58",
+  "icons": [
+    { "src": "icons/app-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
