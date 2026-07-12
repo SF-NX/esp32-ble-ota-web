@@ -1,4 +1,4 @@
-const CACHE = 'bleota-web-v10-remote-firmware';
+const CACHE = 'bleota-web-v11-remote-firmware';
 const ASSETS = ['./', './index.html', './tutorial.html', './tutorial.css', './styles.css', './app.js', './protocol.js', './manifest.webmanifest', './icons/app-icon.svg'];
 
 self.addEventListener('install', (event) => {

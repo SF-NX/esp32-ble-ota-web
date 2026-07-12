@@ -340,7 +340,7 @@ async function selectRemoteFile() {
     toast(error.message, 'error');
   } finally {
     button.disabled = false;
-    button.textContent = '获取';
+    button.textContent = '下载';
   }
 }
 
