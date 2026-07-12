@@ -205,6 +205,15 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .secure-mode strong { font-size: 12px; }
 .secure-mode small { margin-top: 2px; color: var(--text-2); font-size: 9px; }
 .secure-chip { padding: 4px 6px; border-radius: 5px; color: var(--brand); background: var(--surface); font: 700 8px/1.2 ui-monospace, monospace; white-space: nowrap; }
+.remote-package { min-height: 62px; margin-top: 10px; padding: 9px 10px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); }
+.remote-package-icon { width: 40px; height: 40px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 7px; color: var(--brand); background: var(--brand-soft); }
+.remote-package-copy { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+.remote-package-copy strong { font-size: 12px; }
+.remote-package-copy small { margin-top: 3px; color: var(--muted); font-size: 10px; }
+.remote-package-button { min-width: 58px; height: 36px; padding: 0 12px; border: 0; border-radius: 7px; color: #fff; background: var(--brand); font-size: 11px; font-weight: 750; cursor: pointer; }
+.remote-package-button:disabled { color: var(--muted); background: var(--border); cursor: wait; }
+.package-divider { margin: 10px 0 0; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 9px; }
+.package-divider::before, .package-divider::after { content: ""; height: 1px; flex: 1; background: var(--border); }
 .file-picker { min-height: 68px; margin-top: 11px; padding: 10px; display: flex; align-items: center; gap: 10px; border: 1px dashed var(--border-strong); border-radius: 8px; cursor: pointer; }
 .file-picker:hover { border-color: var(--brand); background: var(--brand-soft); }
 .file-picker input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }

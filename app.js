@@ -11,6 +11,7 @@ import {
 
 const $ = (id) => document.getElementById(id);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const REMOTE_MANIFEST = './firmware/manifest.json';
 
 const copy = {
     subtitle: '移动固件更新工具', idle: '等待连接设备', ready: '准备就绪', deviceTitle: '连接设备',
@@ -308,6 +309,42 @@ async function selectFile(file) {
     toast(error.message, 'error');
     return;
   }
+  applyPackageSelection(file, bytes, packageInfo);
+}
+
+async function selectRemoteFile() {
+  const button = $('remoteFileButton');
+  button.disabled = true;
+  button.textContent = '下载中...';
+  addLog('正在获取在线升级包', 'accent');
+  try {
+    const manifestResponse = await fetch(`${REMOTE_MANIFEST}?v=${Date.now()}`, { cache: 'no-store' });
+    if (!manifestResponse.ok) throw new Error(`升级包信息获取失败 (${manifestResponse.status})`);
+    const manifest = await manifestResponse.json();
+    const packageResponse = await fetch(`./firmware/${manifest.file}?v=${Date.now()}`, { cache: 'no-store' });
+    if (!packageResponse.ok) throw new Error(`升级包下载失败 (${packageResponse.status})`);
+    const bytes = new Uint8Array(await packageResponse.arrayBuffer());
+    if (bytes.length !== manifest.size) throw new Error('升级包下载不完整');
+    if (manifest.sha256 && globalThis.crypto?.subtle) {
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      const actualHash = Array.from(new Uint8Array(digest), (value) => value.toString(16).padStart(2, '0')).join('');
+      if (actualHash !== String(manifest.sha256).toLowerCase()) throw new Error('升级包完整性校验失败');
+    }
+    const packageInfo = parseOtaPackage(bytes);
+    const file = { name: manifest.displayName || manifest.file, size: bytes.length };
+    applyPackageSelection(file, bytes, packageInfo);
+    addLog(`在线升级包已就绪: ${file.name}`, 'ok');
+    toast('升级包已下载并选中', 'success');
+  } catch (error) {
+    addLog(`在线升级包获取失败: ${error.message}`, 'error');
+    toast(error.message, 'error');
+  } finally {
+    button.disabled = false;
+    button.textContent = '获取';
+  }
+}
+
+function applyPackageSelection(file, bytes, packageInfo) {
   state.file = file;
   state.fileBytes = bytes;
   state.packageInfo = packageInfo;
@@ -316,6 +353,8 @@ async function selectFile(file) {
   $('filePackageMeta').textContent = `${packageInfo.productId} · ${packageInfo.batchId} · V${packageInfo.firmwareVersion} · S${packageInfo.secureVersion}`;
   $('fileSummary').classList.remove('hidden');
   $('filePicker').classList.add('hidden');
+  $('remotePackage').classList.add('hidden');
+  $('packageDivider').classList.add('hidden');
   $('fileStep').classList.add('complete');
   addLog(`OTA: ${file.name} (${formatBytes(file.size)}) batch=${packageInfo.batchId}`, 'ok');
   refreshAction();
@@ -324,7 +363,11 @@ async function selectFile(file) {
 function removeFile() {
   state.file = null; state.fileBytes = null; state.packageInfo = null; $('fileInput').value = '';
   $('filePackageMeta').textContent = '';
-  $('fileSummary').classList.add('hidden'); $('filePicker').classList.remove('hidden'); $('fileStep').classList.remove('complete');
+  $('fileSummary').classList.add('hidden');
+  $('filePicker').classList.remove('hidden');
+  $('remotePackage').classList.remove('hidden');
+  $('packageDivider').classList.remove('hidden');
+  $('fileStep').classList.remove('complete');
   refreshAction();
 }
 
@@ -487,6 +530,7 @@ function toggleUploadingUi(uploading) {
   $('connectButton').disabled = uploading;
   $('disconnectButton').disabled = uploading;
   $('fileInput').disabled = uploading;
+  $('remoteFileButton').disabled = uploading;
 }
 
 function refreshAction() {
@@ -541,6 +585,7 @@ function bindUi() {
   $('connectButton').addEventListener('click', connectDevice);
   $('disconnectButton').addEventListener('click', disconnectDevice);
   $('fileInput').addEventListener('change', (event) => selectFile(event.target.files?.[0]));
+  $('remoteFileButton').addEventListener('click', selectRemoteFile);
   $('removeFileButton').addEventListener('click', removeFile);
   $('startButton').addEventListener('click', startUpdate);
   $('abortButton').addEventListener('click', () => { state.abortRequested = true; $('abortButton').disabled = true; addLog(t('aborted'), 'warn'); });

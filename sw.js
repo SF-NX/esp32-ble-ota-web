@@ -1,4 +1,4 @@
-const CACHE = 'bleota-web-v8-tutorial';
+const CACHE = 'bleota-web-v10-remote-firmware';
 const ASSETS = ['./', './index.html', './tutorial.html', './tutorial.css', './styles.css', './app.js', './protocol.js', './manifest.webmanifest', './icons/app-icon.svg'];
 
 self.addEventListener('install', (event) => {
@@ -11,6 +11,10 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  if (new URL(event.request.url).pathname.includes('/firmware/')) {
+    event.respondWith(fetch(event.request, { cache: 'no-store' }));
+    return;
+  }
   event.respondWith(fetch(event.request).then((response) => {
     const copy = response.clone();
     caches.open(CACHE).then((cache) => cache.put(event.request, copy));
