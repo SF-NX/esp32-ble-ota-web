@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7f6">
+  <meta name="description" content="仪表 OTA 网页升级使用教程">
+  <title>仪表 OTA 升级教程</title>
+  <link rel="icon" href="icons/app-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="tutorial.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html" aria-label="返回升级工具">‹</a>
+    <div class="tutorial-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="m7 7 10 10-5 4V3l5 4L7 17"/></svg>
+    </div>
+    <div>
+      <h1>升级使用教程</h1>
+      <p>仪表 OTA 固件更新</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <span class="eyebrow">开始前请确认</span>
+      <h2>准备好设备和升级包</h2>
+      <div class="check-grid">
+        <div><span>1</span><p><strong>仪表已供电</strong><small>升级过程中保持稳定供电</small></p></div>
+        <div><span>2</span><p><strong>设备进入 OTA 模式</strong><small>按设备说明进入升级状态</small></p></div>
+        <div><span>3</span><p><strong>已下载 .ota 文件</strong><small>不要修改文件名或内容</small></p></div>
+      </div>
+    </section>
+
+    <section class="platform-section">
+      <div class="section-heading"><span>平台</span><h2>选择正确的浏览器</h2></div>
+      <div class="platform-list">
+        <article>
+          <div class="platform-icon android">A</div>
+          <div><h3>Android 手机</h3><p>使用最新版 Chrome 或 Edge 打开升级网页。</p></div>
+          <strong>推荐</strong>
+        </article>
+        <article>
+          <div class="platform-icon ios">iOS</div>
+          <div><h3>iPhone / iPad</h3><p>Safari 和 Chrome 无法连接蓝牙，请使用 Bluefy 打开升级网页。</p><a href="https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055" target="_blank" rel="noreferrer">安装 Bluefy</a></div>
+        </article>
+        <article>
+          <div class="platform-icon desktop">PC</div>
+          <div><h3>电脑</h3><p>使用带蓝牙功能的 Chrome 或 Edge。</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="steps-section">
+      <div class="section-heading"><span>步骤</span><h2>完成仪表升级</h2></div>
+
+      <article class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>搜索并连接设备</h3>
+          <p>点击“搜索并连接”，允许浏览器使用蓝牙，然后在设备列表中选择正在升级的仪表。</p>
+          <div class="ui-demo"><span class="dot"></span><strong>等待连接设备</strong><button>搜索并连接</button></div>
+          <div class="tip">设备名称通常包含 <code>OTA</code>。附近有多台设备时，请核对名称后再连接。</div>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>选择升级包</h3>
+          <p>点击“选择 .ota 升级包”，从手机或电脑中选择已经下载的仪表 OTA 文件。</p>
+          <div class="file-demo"><span>＋</span><p><strong>选择 .ota 升级包</strong><small>请上传已下载的仪表OTA文件</small></p><b>浏览</b></div>
+          <p class="verify">选择成功后，请核对产品、批次和版本信息是否与目标仪表一致。</p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>开始更新</h3>
+          <p>设备连接并选择升级包后，底部“开始更新”按钮会变为可用。点击后开始传输。</p>
+          <div class="start-demo"><span>下一步<br><strong>可以开始更新</strong></span><button>开始更新</button></div>
+        </div>
+      </article>
+
+      <article class="step important">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>保持页面在前台</h3>
+          <p>传输期间不要锁屏、切换应用、关闭网页或让仪表断电。等待进度到达 100%。</p>
+          <div class="progress-demo">
+            <div class="ring">68%</div>
+            <p><strong>正在传输升级包</strong><span>已发送、速度和剩余时间会持续更新</span></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="step success-step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h3>等待仪表重启</h3>
+          <p>页面显示“更新完成”后，仪表会自动断开蓝牙并重启。重新开机后即可检查新版本。</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="troubleshooting">
+      <div class="section-heading"><span>排查</span><h2>遇到问题怎么办</h2></div>
+      <details>
+        <summary>搜索不到仪表</summary>
+        <p>确认仪表已进入 OTA 模式、手机蓝牙已开启，并让手机靠近仪表。关闭其他已连接该仪表的 App 后重新搜索。</p>
+      </details>
+      <details>
+        <summary>“开始更新”按钮不能点击</summary>
+        <p>必须先成功连接设备，并选择有效的 `.ota` 升级包，两项都完成后按钮才会启用。</p>
+      </details>
+      <details>
+        <summary>升级中断或失败</summary>
+        <p>让仪表重新进入 OTA 模式，保持稳定供电和近距离连接，然后重新选择原升级包再试一次。</p>
+      </details>
+      <details>
+        <summary>iPhone 无法弹出蓝牙设备</summary>
+        <p>不要使用 Safari 或 Chrome。请安装 Bluefy，并在 Bluefy 中打开升级网页的 HTTPS 地址。</p>
+      </details>
+    </section>
+  </main>
+
+  <div class="action-space"></div>
+  <footer class="bottom-action">
+    <p><small>准备完成后</small><strong>打开升级工具</strong></p>
+    <a href="index.html">开始升级</a>
+  </footer>
+</body>
+</html>

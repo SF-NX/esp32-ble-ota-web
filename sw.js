@@ -1,5 +1,5 @@
-const CACHE = 'bleota-web-v7-copy-sync';
-const ASSETS = ['./', './index.html', './styles.css', './app.js', './protocol.js', './manifest.webmanifest', './icons/app-icon.svg'];
+const CACHE = 'bleota-web-v8-tutorial';
+const ASSETS = ['./', './index.html', './tutorial.html', './tutorial.css', './styles.css', './app.js', './protocol.js', './manifest.webmanifest', './icons/app-icon.svg'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
