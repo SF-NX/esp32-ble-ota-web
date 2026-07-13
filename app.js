@@ -14,7 +14,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const REMOTE_MANIFEST = './firmware/manifest.json';
 
 const copy = {
-    subtitle: '移动固件更新工具', idle: '等待连接设备', ready: '准备就绪', deviceTitle: '连接设备',
+    subtitle: '仪表固件更新工具', idle: '等待连接设备', ready: '准备就绪', deviceTitle: '连接设备',
     deviceHint: '选择附近的 BLE OTA 设备', connect: '搜索并连接', disconnect: '断开', firmwareTitle: '选择升级包',
     firmwareHint: '请选择后缀为 .ota 的文件', chooseFile: '选择 .ota 升级包', chooseFileHint: '请上传已下载的仪表OTA文件',
     browse: '浏览', updateTitle: '固件更新', updateHint: '传输时请保持页面在前台', progress: '进度', waiting: '等待开始',
