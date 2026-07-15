@@ -244,7 +244,8 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .file-summary { margin-top: 10px; padding: 9px 10px; display: flex; align-items: center; gap: 9px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface-2); }
 .file-summary > svg { flex: 0 0 auto; color: var(--success); }
 .file-summary > div { min-width: 0; flex: 1; display: flex; flex-direction: column; }
-.file-summary strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.file-summary .icon-button { flex: 0 0 auto; }
+.file-summary strong { overflow-wrap: anywhere; word-break: break-word; font-size: 12px; line-height: 1.35; }
 .file-summary span { margin-top: 2px; color: var(--muted); font-size: 10px; }
 #filePackageMeta { color: var(--brand); font-weight: 650; }
 

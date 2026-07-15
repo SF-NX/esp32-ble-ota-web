@@ -1,4 +1,4 @@
-const CACHE = 'bleota-web-v14-edge-android';
+const CACHE = 'bleota-web-v15-wrapping-file-name';
 const ASSETS = ['./', './index.html', './tutorial.html', './tutorial.css', './styles.css', './app.js', './protocol.js', './manifest.webmanifest', './icons/app-icon.svg'];
 
 self.addEventListener('install', (event) => {
