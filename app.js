@@ -35,10 +35,13 @@ const copy = {
 
 const platform = (() => {
   const ua = navigator.userAgent || '';
+  const brands = navigator.userAgentData?.brands?.map((brand) => brand.brand).join(' ') || '';
   const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const android = /Android/i.test(ua);
+  const edgeAndroid = android && (/EdgA\//i.test(ua) || /Microsoft Edge/i.test(brands));
   const bluefy = /Bluefy/i.test(ua) || Boolean(window.BLENative) || (ios && Boolean(navigator.bluetooth));
   const localhost = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
-  return { ios, bluefy, secure: window.isSecureContext || localhost, bluetooth: Boolean(navigator.bluetooth) };
+  return { ios, android, edgeAndroid, bluefy, secure: window.isSecureContext || localhost, bluetooth: Boolean(navigator.bluetooth) };
 })();
 
 const state = {
@@ -95,7 +98,7 @@ class BleAdapter {
 
   async writeFirmwarePacket(packet) {
     if (!this.recvChar) throw new Error(t('disconnected'));
-    await this.write(this.recvChar, packet, true);
+    await this.write(this.recvChar, packet, !platform.edgeAndroid);
   }
 
   waitForCommand(command, timeout = BLEOTA.COMMAND_TIMEOUT) {
@@ -111,12 +114,14 @@ class BleAdapter {
   }
 
   async probeFirmwarePayload() {
-    const candidates = platform.bluefy ? [247, 185, 122, 64, 20] : [510, 247, 185, 122, 64, 20];
+    const candidates = platform.bluefy || platform.edgeAndroid ? [247, 185, 122, 64, 20] : [510, 247, 185, 122, 64, 20];
+    const withoutResponse = !platform.edgeAndroid;
     for (const valueSize of candidates) {
       try {
-        await this.write(this.recvChar, new Uint8Array(valueSize), true);
+        await this.write(this.recvChar, new Uint8Array(valueSize), withoutResponse);
         const payload = Math.max(1, Math.min(BLEOTA.MAX_FIRMWARE_PAYLOAD, valueSize - 3));
-        addLog(`BLE value=${valueSize}B, firmware payload=${payload}B`, 'accent');
+        const mode = withoutResponse ? 'without response' : 'with response';
+        addLog(`BLE value=${valueSize}B, firmware payload=${payload}B (${mode})`, 'accent');
         return payload;
       } catch (error) {
         addLog(`BLE value ${valueSize}B rejected`, 'info');
@@ -130,8 +135,8 @@ class BleAdapter {
     if (withoutResponse && typeof characteristic.writeValueWithoutResponse === 'function') {
       return characteristic.writeValueWithoutResponse(value);
     }
-    if (typeof characteristic.writeValue === 'function') return characteristic.writeValue(value);
     if (typeof characteristic.writeValueWithResponse === 'function') return characteristic.writeValueWithResponse(value);
+    if (typeof characteristic.writeValue === 'function') return characteristic.writeValue(value);
     throw new Error('No compatible BLE write method');
   }
 
@@ -657,6 +662,7 @@ function init() {
   bindUi(); applyTheme(); applyTranslations(); showPlatformNotice(); resetProgress();
   loadReleaseNotes();
   addLog(`Platform: ${platform.bluefy ? 'Bluefy' : platform.ios ? 'iOS browser' : 'Web Bluetooth'}`, 'accent');
+  if (platform.edgeAndroid) addLog('Android Edge compatibility: reliable BLE writes enabled', 'accent');
   if ('serviceWorker' in navigator && platform.secure) navigator.serviceWorker.register('./sw.js').catch((error) => addLog(`PWA cache: ${error.message}`, 'info'));
 }
 
