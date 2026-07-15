@@ -103,6 +103,17 @@
           <span class="remote-package-copy"><strong>在线升级包</strong><small>下载并直接用于本次升级</small></span>
           <button class="remote-package-button" id="remoteFileButton" type="button">下载</button>
         </div>
+
+        <details class="release-notes" id="releaseNotes">
+          <summary>
+            <span class="release-notes-title"><strong>更新日志</strong><small id="releaseVersion">正在读取版本信息</small></span>
+            <svg class="release-notes-chevron"><use href="#i-chevron"/></svg>
+          </summary>
+          <div class="release-notes-body">
+            <div class="release-notes-meta"><span id="releaseName">最新升级包</span><time id="releaseDate"></time></div>
+            <ul id="releaseChanges"><li>正在读取更新内容...</li></ul>
+          </div>
+        </details>
         <div class="package-divider" id="packageDivider"><span>或选择本地文件</span></div>
 
         <label class="file-picker" id="filePicker">
@@ -166,6 +177,6 @@
   </section>
 
   <div class="toast-region" id="toastRegion" aria-live="assertive"></div>
-  <script type="module" src="app.js?v=11"></script>
+  <script type="module" src="app.js?v=12"></script>
 </body>
 </html>

@@ -1,6 +1,14 @@
 {
   "file": "instrument-v1.1-20260712-0433.ota",
   "displayName": "仪表_v1.1_20260712_0433.ota",
+  "version": "v1.1",
+  "releaseName": "仪表固件 v1.1",
+  "publishedAt": "2026-07-12",
+  "changes": [
+    "上线仪表固件 v1.1 升级包",
+    "适配 JK-LCD-C3 / DEV-001",
+    "升级包版本标识：V1 · S1"
+  ],
   "size": 1446076,
   "sha256": "cb07b13dbf9be2632337e72cb93d475812e9c1a1d69f2875440b86d12c50e6c0"
 }

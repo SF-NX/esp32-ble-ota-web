@@ -43,7 +43,8 @@ const platform = (() => {
 
 const state = {
   phase: 'idle', dark: localStorage.getItem('bleota-theme') === 'dark',
-  file: null, fileBytes: null, packageInfo: null, uploading: false, abortRequested: false, logs: 0, wakeLock: null
+  file: null, fileBytes: null, packageInfo: null, remoteManifest: null,
+  uploading: false, abortRequested: false, logs: 0, wakeLock: null
 };
 
 class BleAdapter {
@@ -318,9 +319,7 @@ async function selectRemoteFile() {
   button.textContent = '下载中...';
   addLog('正在获取在线升级包', 'accent');
   try {
-    const manifestResponse = await fetch(`${REMOTE_MANIFEST}?v=${Date.now()}`, { cache: 'no-store' });
-    if (!manifestResponse.ok) throw new Error(`升级包信息获取失败 (${manifestResponse.status})`);
-    const manifest = await manifestResponse.json();
+    const manifest = await loadRemoteManifest();
     const packageResponse = await fetch(`./firmware/${manifest.file}?v=${Date.now()}`, { cache: 'no-store' });
     if (!packageResponse.ok) throw new Error(`升级包下载失败 (${packageResponse.status})`);
     const bytes = new Uint8Array(await packageResponse.arrayBuffer());
@@ -342,6 +341,41 @@ async function selectRemoteFile() {
     button.disabled = false;
     button.textContent = '下载';
   }
+}
+
+async function loadRemoteManifest() {
+  if (state.remoteManifest) return state.remoteManifest;
+  const response = await fetch(`${REMOTE_MANIFEST}?v=${Date.now()}`, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`升级包信息获取失败 (${response.status})`);
+  const manifest = await response.json();
+  state.remoteManifest = manifest;
+  renderReleaseNotes(manifest);
+  return manifest;
+}
+
+function renderReleaseNotes(manifest) {
+  $('releaseVersion').textContent = manifest.version || '最新版本';
+  $('releaseName').textContent = manifest.releaseName || manifest.displayName || '最新升级包';
+  $('releaseDate').textContent = manifest.publishedAt || '';
+  const changes = Array.isArray(manifest.changes) && manifest.changes.length
+    ? manifest.changes
+    : ['本版本暂无更新说明'];
+  $('releaseChanges').replaceChildren(...changes.map((change) => {
+    const item = document.createElement('li');
+    item.textContent = change;
+    return item;
+  }));
+}
+
+function loadReleaseNotes() {
+  loadRemoteManifest().catch(() => {
+    $('releaseVersion').textContent = '暂时无法读取';
+    $('releaseName').textContent = '更新日志';
+    $('releaseDate').textContent = '';
+    const item = document.createElement('li');
+    item.textContent = '请稍后刷新页面重试';
+    $('releaseChanges').replaceChildren(item);
+  });
 }
 
 function applyPackageSelection(file, bytes, packageInfo) {
@@ -606,6 +640,7 @@ function applyTheme() {
 
 function init() {
   bindUi(); applyTheme(); applyTranslations(); showPlatformNotice(); resetProgress();
+  loadReleaseNotes();
   addLog(`Platform: ${platform.bluefy ? 'Bluefy' : platform.ios ? 'iOS browser' : 'Web Bluetooth'}`, 'accent');
   if ('serviceWorker' in navigator && platform.secure) navigator.serviceWorker.register('./sw.js').catch((error) => addLog(`PWA cache: ${error.message}`, 'info'));
 }
