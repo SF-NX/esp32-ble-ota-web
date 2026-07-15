@@ -222,9 +222,15 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .release-notes[open] .release-notes-chevron { transform: rotate(180deg); }
 .release-notes-body { padding: 0 11px 11px; border-top: 1px solid var(--border); }
 .release-notes-meta { padding-top: 10px; display: flex; justify-content: space-between; gap: 12px; color: var(--text-2); font-size: 10px; font-weight: 700; }
-.release-notes-meta time { flex: 0 0 auto; color: var(--muted); font-weight: 500; }
-.release-notes ul { margin: 8px 0 0; padding-left: 17px; color: var(--text-2); font-size: 11px; line-height: 1.65; }
+.release-notes-meta > :last-child { flex: 0 0 auto; color: var(--muted); font-weight: 500; }
+.release-history { display: grid; gap: 11px; margin-top: 9px; }
+.release-entry + .release-entry { padding-top: 10px; border-top: 1px solid var(--border); }
+.release-entry-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.release-entry-heading strong { color: var(--brand); font-size: 12px; }
+.release-entry-heading time { color: var(--muted); font-size: 9px; }
+.release-entry ul { margin: 6px 0 0; padding-left: 17px; color: var(--text-2); font-size: 11px; line-height: 1.65; }
 .release-notes li::marker { color: var(--brand); }
+.release-history > p { margin: 0; color: var(--muted); font-size: 11px; }
 .package-divider { margin: 10px 0 0; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 9px; }
 .package-divider::before, .package-divider::after { content: ""; height: 1px; flex: 1; background: var(--border); }
 .file-picker { min-height: 68px; margin-top: 11px; padding: 10px; display: flex; align-items: center; gap: 10px; border: 1px dashed var(--border-strong); border-radius: 8px; cursor: pointer; }

@@ -356,14 +356,28 @@ async function loadRemoteManifest() {
 function renderReleaseNotes(manifest) {
   $('releaseVersion').textContent = manifest.version || '最新版本';
   $('releaseName').textContent = manifest.releaseName || manifest.displayName || '最新升级包';
-  $('releaseDate').textContent = manifest.publishedAt || '';
-  const changes = Array.isArray(manifest.changes) && manifest.changes.length
-    ? manifest.changes
-    : ['本版本暂无更新说明'];
-  $('releaseChanges').replaceChildren(...changes.map((change) => {
-    const item = document.createElement('li');
-    item.textContent = change;
-    return item;
+  const releases = Array.isArray(manifest.releases) && manifest.releases.length
+    ? manifest.releases
+    : [{ version: manifest.version, publishedAt: manifest.publishedAt, changes: manifest.changes }];
+  $('releaseHistory').replaceChildren(...releases.map((release) => {
+    const entry = document.createElement('section');
+    entry.className = 'release-entry';
+    const heading = document.createElement('div');
+    heading.className = 'release-entry-heading';
+    const version = document.createElement('strong');
+    version.textContent = release.version || '版本更新';
+    const date = document.createElement('time');
+    date.textContent = release.publishedAt || '';
+    heading.append(version, date);
+    const list = document.createElement('ul');
+    const changes = Array.isArray(release.changes) && release.changes.length ? release.changes : ['本版本暂无更新说明'];
+    list.replaceChildren(...changes.map((change) => {
+      const item = document.createElement('li');
+      item.textContent = change;
+      return item;
+    }));
+    entry.append(heading, list);
+    return entry;
   }));
 }
 
@@ -371,10 +385,9 @@ function loadReleaseNotes() {
   loadRemoteManifest().catch(() => {
     $('releaseVersion').textContent = '暂时无法读取';
     $('releaseName').textContent = '更新日志';
-    $('releaseDate').textContent = '';
-    const item = document.createElement('li');
-    item.textContent = '请稍后刷新页面重试';
-    $('releaseChanges').replaceChildren(item);
+    const message = document.createElement('p');
+    message.textContent = '请稍后刷新页面重试';
+    $('releaseHistory').replaceChildren(message);
   });
 }
 
@@ -384,7 +397,9 @@ function applyPackageSelection(file, bytes, packageInfo) {
   state.packageInfo = packageInfo;
   $('fileName').textContent = file.name;
   $('fileSize').textContent = formatBytes(file.size);
-  $('filePackageMeta').textContent = `${packageInfo.productId} · ${packageInfo.batchId} · V${packageInfo.firmwareVersion} · S${packageInfo.secureVersion}`;
+  const nameVersion = file.name.match(/(?:^|[_-])v(\d+(?:\.\d+)?)(?:[_-]|\.)/i)?.[1];
+  const displayVersion = nameVersion ? `V${nameVersion}` : `V${packageInfo.firmwareVersion}`;
+  $('filePackageMeta').textContent = `${packageInfo.productId} · ${packageInfo.batchId} · ${displayVersion} · S${packageInfo.secureVersion}`;
   $('fileSummary').classList.remove('hidden');
   $('filePicker').classList.add('hidden');
   $('remotePackage').classList.add('hidden');

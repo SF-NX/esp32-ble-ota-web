@@ -1,4 +1,4 @@
-const CACHE = 'bleota-web-v12-release-notes';
+const CACHE = 'bleota-web-v13-firmware-v12';
 const ASSETS = ['./', './index.html', './tutorial.html', './tutorial.css', './styles.css', './app.js', './protocol.js', './manifest.webmanifest', './icons/app-icon.svg'];
 
 self.addEventListener('install', (event) => {
