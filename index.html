@@ -8,7 +8,7 @@
   <title>SFNX OTA</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/app-icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=17">
+  <link rel="stylesheet" href="styles.css?v=18">
 </head>
 <body class="modal-open">
   <svg class="svg-sprite" aria-hidden="true">
@@ -50,7 +50,7 @@
     </section>
 
     <aside class="notice hidden" id="platformNotice">
-      <svg><use href="#i-alert"/></svg>
+      <svg><use id="noticeIcon" href="#i-alert"/></svg>
       <div>
         <strong id="noticeTitle"></strong>
         <p id="noticeBody"></p>
@@ -205,6 +205,6 @@
   </div>
 
   <div class="toast-region" id="toastRegion" aria-live="assertive"></div>
-  <script type="module" src="app.js?v=17"></script>
+  <script type="module" src="app.js?v=18"></script>
 </body>
 </html>
