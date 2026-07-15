@@ -241,6 +241,8 @@ function showPlatformNotice() {
     title = t('secureTitle'); body = t('secureBody');
   } else if (platform.ios && !platform.bluefy) {
     title = t('iosTitle'); body = t('iosBody'); link.classList.remove('hidden');
+  } else if (platform.android) {
+    // Android browser capability reporting varies by browser and device.
   } else if (!platform.bluetooth) {
     title = t('unsupportedTitle'); body = t('unsupportedBody');
   } else if (platform.bluefy) {
