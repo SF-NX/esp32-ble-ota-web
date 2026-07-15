@@ -140,9 +140,11 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
   color: var(--text-2);
   background: var(--warning-soft);
 }
-.notice > svg { flex: 0 0 auto; color: var(--warning); }
+.notice-icon { display: grid; flex: 0 0 auto; place-items: center; color: var(--warning); }
+.notice-icon svg { width: 20px; height: 20px; }
 .notice.supported { border-color: var(--success); background: var(--brand-soft); }
-.notice.supported > svg { width: 28px; height: 28px; padding: 5px; border-radius: 6px; color: #fff; background: var(--success); stroke-width: 3; }
+.notice.supported .notice-icon { width: 42px; align-self: stretch; border-radius: 7px; color: #fff; background: var(--success); }
+.notice.supported .notice-icon svg { width: 26px; height: 26px; stroke-width: 3; }
 .notice strong { display: block; color: var(--text); font-size: 13px; }
 .notice p { margin: 3px 0 0; font-size: 12px; line-height: 1.5; }
 .notice-link { display: inline-block; margin-top: 8px; color: var(--brand); font-size: 12px; font-weight: 700; }

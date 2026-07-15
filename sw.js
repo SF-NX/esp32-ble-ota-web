@@ -1,4 +1,4 @@
-const CACHE = 'bleota-web-v19-platform-status-icon';
+const CACHE = 'bleota-web-v20-platform-status-icon';
 const ASSETS = ['./', './index.html', './tutorial.html', './tutorial.css', './styles.css', './app.js', './protocol.js', './manifest.webmanifest', './icons/app-icon.svg'];
 
 self.addEventListener('install', (event) => {
