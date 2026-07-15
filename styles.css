@@ -295,6 +295,47 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .toast.error { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
 .toast.success { color: var(--success); border-color: var(--success); background: var(--brand-soft); }
 
+body.modal-open { overflow: hidden; }
+.welcome-modal {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  background: rgba(10, 22, 19, .58);
+  backdrop-filter: blur(3px);
+}
+.welcome-modal.hidden { display: none; }
+.welcome-panel {
+  width: min(100%, 420px);
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: 0 16px 45px rgba(7, 25, 20, .22);
+}
+.welcome-heading { display: flex; align-items: center; gap: 12px; }
+.welcome-icon { width: 42px; height: 42px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 7px; color: var(--warning); background: var(--warning-soft); }
+.welcome-icon svg { width: 22px; height: 22px; }
+.welcome-heading h2 { margin: 0; font-size: 20px; line-height: 1.2; }
+.welcome-heading p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+.welcome-steps { margin: 18px 0 0; padding: 0; display: grid; gap: 9px; list-style: none; }
+.welcome-steps li { padding: 11px; display: flex; align-items: flex-start; gap: 10px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface-2); }
+.welcome-steps li > span { width: 24px; height: 24px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 6px; color: var(--brand); background: var(--brand-soft); font-size: 11px; font-weight: 850; }
+.welcome-steps strong { display: block; font-size: 13px; }
+.welcome-steps p { margin: 3px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.welcome-warning { margin: 12px 0 0; padding: 10px 11px; border-left: 3px solid var(--warning); color: var(--text); background: var(--warning-soft); font-size: 12px; line-height: 1.5; }
+.welcome-confirm { width: 100%; min-height: 48px; margin-top: 16px; border: 0; border-radius: 7px; color: #fff; background: var(--brand); font-size: 14px; font-weight: 800; cursor: pointer; }
+.welcome-confirm:active { background: var(--brand-strong); }
+
+@media (max-height: 560px) {
+  .welcome-modal { display: block; }
+  .welcome-panel { margin: 0 auto; }
+}
+
 @keyframes pulse { 50% { opacity: .35; transform: scale(.82); } }
 @keyframes toast-in { from { opacity: 0; transform: translateY(-8px); } }
 

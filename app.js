@@ -644,6 +644,10 @@ function formatTime(seconds) {
 class AbortError extends Error {}
 
 function bindUi() {
+  $('welcomeConfirm').addEventListener('click', () => {
+    $('welcomeModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
+  });
   $('connectButton').addEventListener('click', connectDevice);
   $('disconnectButton').addEventListener('click', disconnectDevice);
   $('fileInput').addEventListener('change', (event) => selectFile(event.target.files?.[0]));
@@ -668,6 +672,7 @@ function applyTheme() {
 
 function init() {
   bindUi(); applyTheme(); applyTranslations(); showPlatformNotice(); resetProgress();
+  $('welcomeConfirm').focus();
   loadReleaseNotes();
   addLog(`Platform: ${platform.bluefy ? 'Bluefy' : platform.ios ? 'iOS browser' : 'Web Bluetooth'}`, 'accent');
   if (platform.edgeAndroid) addLog('Android Edge compatibility: reliable BLE writes enabled', 'accent');

@@ -8,9 +8,9 @@
   <title>SFNX OTA</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/app-icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="styles.css?v=17">
 </head>
-<body>
+<body class="modal-open">
   <svg class="svg-sprite" aria-hidden="true">
     <symbol id="i-bluetooth" viewBox="0 0 24 24"><path d="m7 7 10 10-5 4V3l5 4L7 17"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
@@ -176,7 +176,35 @@
     </div>
   </section>
 
+  <div class="welcome-modal" id="welcomeModal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="welcome-panel">
+      <div class="welcome-heading">
+        <div class="welcome-icon"><svg><use href="#i-alert"/></svg></div>
+        <div>
+          <h2 id="welcomeTitle">使用前须知</h2>
+          <p>升级前请确认以下事项</p>
+        </div>
+      </div>
+      <ol class="welcome-steps">
+        <li>
+          <span>1</span>
+          <div><strong>打开仪表升级模式</strong><p>进入仪表“设置”，打开“固件升级”。</p></div>
+        </li>
+        <li>
+          <span>2</span>
+          <div><strong>安卓手机</strong><p>请使用 Edge 或 Chrome 浏览器打开本页面。</p></div>
+        </li>
+        <li>
+          <span>3</span>
+          <div><strong>苹果手机</strong><p>请使用 Bluefy 浏览器打开本页面。</p></div>
+        </li>
+      </ol>
+      <p class="welcome-warning">其他浏览器不支持蓝牙功能，无法连接设备进行升级。</p>
+      <button class="welcome-confirm" id="welcomeConfirm" type="button">我知道了</button>
+    </div>
+  </div>
+
   <div class="toast-region" id="toastRegion" aria-live="assertive"></div>
-  <script type="module" src="app.js?v=16"></script>
+  <script type="module" src="app.js?v=17"></script>
 </body>
 </html>
