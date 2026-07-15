@@ -142,7 +142,7 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 }
 .notice > svg { flex: 0 0 auto; color: var(--warning); }
 .notice.supported { border-color: var(--success); background: var(--brand-soft); }
-.notice.supported > svg { color: var(--success); }
+.notice.supported > svg { width: 28px; height: 28px; padding: 5px; border-radius: 6px; color: #fff; background: var(--success); stroke-width: 3; }
 .notice strong { display: block; color: var(--text); font-size: 13px; }
 .notice p { margin: 3px 0 0; font-size: 12px; line-height: 1.5; }
 .notice-link { display: inline-block; margin-top: 8px; color: var(--brand); font-size: 12px; font-weight: 700; }
