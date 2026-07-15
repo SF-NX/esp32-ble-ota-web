@@ -1,6 +1,6 @@
 {
-  "file": "JK-LCD-C3_DEV-001_v1.2_s1_20260715-012209.ota",
-  "displayName": "JK-LCD-C3_DEV-001_v1.2_s1_20260715-012209.ota",
+  "file": "JK-LCD-C3_DEV-001_v1.2_s1_20260715-031141.ota",
+  "displayName": "JK-LCD-C3_DEV-001_v1.2_s1_20260715-031141.ota",
   "version": "V1.2",
   "releaseName": "仪表 OTA",
   "publishedAt": "2026-07-15",
@@ -35,5 +35,5 @@
     }
   ],
   "size": 1454268,
-  "sha256": "c7861aa9c8c1ad8a8c9650bc7ac461ed62a39fb0f012673d8afe52d81dff4f5c"
+  "sha256": "d4930027aa614c00654341677cc78f98cd41dc773ac4b75d1fe684cea9a69103"
 }
