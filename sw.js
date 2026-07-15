@@ -1,4 +1,4 @@
-const CACHE = 'bleota-web-v23-android-notice';
+const CACHE = 'bleota-web-v24-platform-notice';
 const ASSETS = ['./', './index.html', './tutorial.html', './tutorial.css', './styles.css', './app.js', './protocol.js', './manifest.webmanifest', './icons/app-icon.svg'];
 
 self.addEventListener('install', (event) => {

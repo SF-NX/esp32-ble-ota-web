@@ -143,8 +143,8 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .notice-icon { display: grid; flex: 0 0 auto; place-items: center; color: var(--warning); }
 .notice-icon svg { width: 20px; height: 20px; }
 .notice.supported { border-color: var(--success); background: var(--brand-soft); }
-.notice.supported .notice-icon { width: 40px; height: 40px; align-self: center; border-radius: 7px; color: #fff; background: var(--success); }
-.notice.supported .notice-icon svg { width: 26px; height: 26px; stroke-width: 3; }
+.notice.supported .notice-icon { width: 30px; height: 30px; align-self: center; border: 1px solid var(--success); border-radius: 50%; color: var(--success); background: var(--surface); }
+.notice.supported .notice-icon svg { width: 18px; height: 18px; stroke-width: 2.6; }
 .notice strong { display: block; color: var(--text); font-size: 13px; }
 .notice p { margin: 3px 0 0; font-size: 12px; line-height: 1.5; }
 .notice-link { display: inline-block; margin-top: 8px; color: var(--brand); font-size: 12px; font-weight: 700; }

@@ -39,10 +39,11 @@ const platform = (() => {
   const brands = navigator.userAgentData?.brands?.map((brand) => brand.brand).join(' ') || '';
   const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const android = /Android/i.test(ua);
+  const windows = /Windows/i.test(ua);
   const edgeAndroid = android && (/EdgA\//i.test(ua) || /Microsoft Edge/i.test(brands));
   const bluefy = /Bluefy/i.test(ua) || Boolean(window.BLENative) || (ios && Boolean(navigator.bluetooth));
   const localhost = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
-  return { ios, android, edgeAndroid, bluefy, secure: window.isSecureContext || localhost, bluetooth: Boolean(navigator.bluetooth) };
+  return { ios, android, windows, edgeAndroid, bluefy, secure: window.isSecureContext || localhost, bluetooth: Boolean(navigator.bluetooth) };
 })();
 
 const state = {
@@ -241,12 +242,12 @@ function showPlatformNotice() {
     title = t('secureTitle'); body = t('secureBody');
   } else if (platform.ios && !platform.bluefy) {
     title = t('iosTitle'); body = t('iosBody'); link.classList.remove('hidden');
-  } else if (platform.android) {
-    // Android browser capability reporting varies by browser and device.
-  } else if (!platform.bluetooth) {
-    title = t('unsupportedTitle'); body = t('unsupportedBody');
   } else if (platform.bluefy) {
     title = t('bluefyTitle'); body = t('bluefyBody'); supported = true;
+  } else if (platform.android || platform.windows) {
+    // Browser capability reporting varies across Android and Windows devices.
+  } else if (!platform.bluetooth) {
+    title = t('unsupportedTitle'); body = t('unsupportedBody');
   } else {
     title = t('supportedTitle'); body = t('supportedBody'); supported = true;
   }
