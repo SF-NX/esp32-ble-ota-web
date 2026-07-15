@@ -96,9 +96,9 @@ class BleAdapter {
     await this.write(this.cmdChar, packet, withoutResponse);
   }
 
-  async writeFirmwarePacket(packet) {
+  async writeFirmwarePacket(packet, reliable = false) {
     if (!this.recvChar) throw new Error(t('disconnected'));
-    await this.write(this.recvChar, packet, !platform.edgeAndroid);
+    await this.write(this.recvChar, packet, !reliable);
   }
 
   waitForCommand(command, timeout = BLEOTA.COMMAND_TIMEOUT) {
@@ -115,7 +115,7 @@ class BleAdapter {
 
   async probeFirmwarePayload() {
     const candidates = platform.bluefy || platform.edgeAndroid ? [247, 185, 122, 64, 20] : [510, 247, 185, 122, 64, 20];
-    const withoutResponse = !platform.edgeAndroid;
+    const withoutResponse = true;
     for (const valueSize of candidates) {
       try {
         await this.write(this.recvChar, new Uint8Array(valueSize), withoutResponse);
@@ -451,10 +451,18 @@ async function startUpdate() {
       let success = false;
       for (let attempt = 0; attempt < BLEOTA.MAX_RETRIES && !success && !state.abortRequested; attempt += 1) {
         if (attempt > 0) { addLog(`Retry sector ${sectorIndex} (${attempt + 1}/${BLEOTA.MAX_RETRIES})`, 'warn'); await sleep(400); }
+        const edgeReliable = platform.edgeAndroid && attempt === BLEOTA.MAX_RETRIES - 1;
+        const edgePacketDelay = platform.edgeAndroid && !edgeReliable
+          ? BLEOTA.ANDROID_EDGE_PACKET_DELAYS[Math.min(attempt, BLEOTA.ANDROID_EDGE_PACKET_DELAYS.length - 1)]
+          : 0;
+        if (platform.edgeAndroid && attempt > 0) {
+          addLog(edgeReliable ? 'Android Edge: reliable write fallback' : `Android Edge: pacing ${edgePacketDelay} ms`, 'info');
+        }
         const sectorAck = ble.waitForSector(sectorIndex);
         for (let index = 0; index < packets.length; index += 1) {
-          await ble.writeFirmwarePacket(packets[index]);
-          if (platform.bluefy) await sleep(4);
+          await ble.writeFirmwarePacket(packets[index], edgeReliable);
+          if (edgePacketDelay) await sleep(edgePacketDelay);
+          else if (platform.bluefy) await sleep(4);
           else if (index % 8 === 7) await sleep(0);
         }
         const ack = await sectorAck.catch((error) => ({ answer: -1, error }));
